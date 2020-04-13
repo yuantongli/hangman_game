@@ -1,0 +1,86 @@
+import random
+
+def generate_random_word():
+    word = "dog cat mouse deer snake".split()
+    randomW = random.choice(word)
+    return randomW
+
+
+def getLetter(guessed):
+    guess = input("Please enter a letter: ")
+    guess = guess.lower()
+    return guess
+
+def display(word,rightLetters,guesses_left):
+
+    print('{:n} chance Left'.format(guesses_left))
+
+    print()
+    wordLong = '-'*len(word)
+    for i in range(len(word)):
+        if word[i] in rightLetters:
+            wordLong = wordLong[:i] + word[i] +wordLong[i+1:]
+    for i in wordLong:
+        print(i+' ',end='')
+    print()
+
+
+def play_hangman():
+    wrongLetters = ''
+    rightLetters = ''
+    word = generate_random_word()
+    guesses_left = 6
+    done = False
+    while not (done):
+        display(word,rightLetters, guesses_left)
+
+        guess = getLetter(wrongLetters + rightLetters)
+
+        if guess in word:
+            rightLetters = rightLetters + guess
+            finish = True
+            for i in range(len(word)):
+                if word[i] not in rightLetters:
+                    finish = False
+                    break
+            if finish:
+                print('You win!!!')
+                done = True
+                o = input('Do you want to play again？(y/n)')
+                if (o[0] == 'y'):
+                    wrongLetters = ''
+                    rightLetters = ''
+                    word = generate_random_word()
+                    guesses_left = 6
+                    done = False
+                else:
+                    break
+        else:
+            wrongLetters = wrongLetters + guess
+            guesses_left = guesses_left - 1
+            if guesses_left == 0:
+                display(word,rightLetters,guesses_left)
+                print('You loose.')
+
+                done = True
+                if done:
+                    o = input('Do you want to play again？(y/n)')
+                    if (o[0] == 'y'):
+                        wrongLetters = ''
+                        rightLetters = ''
+                        word = generate_random_word()
+                        guesses_left = 6
+                        done = False
+                    else:
+                        break
+
+
+
+
+play_hangman()
+
+
+
+
+if __name__=='__main__':
+    play_hangman()
